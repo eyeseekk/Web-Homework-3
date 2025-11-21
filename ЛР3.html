@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOODSTER - Собрать ланч</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* lunch-styles.css */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #000000;
+            background-color: #f9f9f9;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: #fff;
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            color: #008c28;
+            font-size: 40px;
+            font-weight: 800;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        nav li {
+            margin-left: 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #000000;
+            font-weight: 500;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: tomato;
+        }
+
+        #active {
+            color: tomato;
+        }
+
+        main {
+            padding: 0;
+            flex: 1;
+        }
+
+        section {
+            margin-bottom: 0;
+            background-color: #fff;
+            padding: 60px 30px;
+            border-radius: 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        section:last-of-type {
+            border-bottom: none;
+        }
+
+        h2 {
+            color: #000000;
+            margin-bottom: 20px;
+            font-size: 45px;
+            font-weight: 500;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 10px;
+        }
+
+        .dishes-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .dish-card {
+            display: flex;
+            flex-direction: column;
+            padding: 30px 40px;
+            border-radius: 35px;
+            cursor: pointer;
+            background-color: white;
+            filter: drop-shadow(17px 19px 24px rgba(0, 0, 0, 0.13));
+        }
+
+        .dish-card:hover {
+            border: 2px solid tomato;
+        }
+
+        .dish-card:hover button {
+            background-color: tomato;
+        }
+
+        .dish-card img {
+            width: 100%;
+            border-radius: 35px;
+        }
+
+        .dish-card .price {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .dish-card .name {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+
+        .dish-card .weight {
+            color: gray;
+            margin-top: 5px;
+        }
+
+        .dish-card button {
+            background-color: #f1eee9;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: auto;
+            margin-top: 15px;
+        }
+
+        footer {
+            background-color: #000000;
+            color: white;
+            padding: 40px 0;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .contact-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .contact-info p {
+            margin-bottom: 10px;
+        }
+
+        .contact-info a {
+            color: #008c28;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        /* Стили для формы заказа */
+        #order-form {
+            background-color: #fff;
+            padding: 60px 30px;
+        }
+
+        .order-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .order-title {
+            color: #000000;
+            margin-bottom: 40px;
+            font-size: 45px;
+            font-weight: 500;
+            border-bottom: 2px solid #000000;
+            padding-bottom: 10px;
+        }
+
+        .form-sections {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #000000;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #000000;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        select:required:invalid {
+            color: #6c757d;
+        }
+
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .checkbox-group, .radio-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-group input, .radio-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .radio-group label {
+            margin-bottom: 0;
+        }
+
+        .delivery-time-options {
+            margin-bottom: 20px;
+        }
+
+        .time-input {
+            margin-top: 15px;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn-reset {
+            background-color: #f1eee9;
+            color: #000000;
+        }
+
+        .btn-submit {
+            background-color: #008c28;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+
+        /* Адаптивность для страницы "Собрать ланч" */
+        @media (max-width: 800px) {
+            .dishes-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            nav ul {
+                justify-content: space-between;
+            }
+            
+            h1 {
+                text-align: center;
+            }
+            
+            .form-sections {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dishes-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav a {
+                font-size: 24px;
+            }
+            
+            h2 {
+                text-align: center;
+            }
+            
+            .form-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Адаптивность для главной страницы */
+        @media (max-width: 800px) {
+            .about-image img {
+                width: 500px;
+            }
+            
+            nav ul {
+                justify-content: space-between;
+            }
+            
+            h1 {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 600px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav a {
+                font-size: 24px;
+            }
+            
+            .about-image img {
+                width: 100%;
+            }
+            
+            table {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            table {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>FOODSTER</h1>
+                <nav>
+                    <ul>
+                        <li><a href="ЛР1.html">Главная</a></li>
+                        <li><a href="#" id="active">Собрать ланч</a></li>
+                        <li><a href="#">Заказы</a></li>
+                        <li><a href="#contacts">Контакты</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="soups">
+            <div class="container">
+                <h2>Выберите первое блюдо</h2>
+                <div class="dishes-grid">
+                    <div class="dish-card">
+                        <img src="https://avatars.dzeninfra.ru/get-zen_doc/271828/pub_68446213eb918822d2ce802e_68448195a95aca6c9f54fd6e/scale_1200" alt="Гаспачо" width="300" height="200">
+                        <p class="price">195P</p>
+                        <p class="name">Гаспачо</p>
+                        <p class="weight">350 г</p>
+                        <button>Добавить</button>
+                    </div>
+                    <div class="dish-card">
+                        <img src="https://recipes-home.ru/wp-content/uploads/2024/06/sup-shamp.jpg" alt="Грибной суп-пюре" width="300" height="200">
+                        <p class="price">185P</p>
+                        <p class="name">Грибной суп-пюре</p>
+                        <p class="weight">330 г</p>
+                        <button>Добавить</button>
+                    </div>
+                    <div class="dish-card">
+                        <img src="D:\Политех\Веб\menu\menu\soups\norwegian_soup.jpg" alt="Норвежский суп" width="300" height="200">
+                        <p class="price">270P</p>
+                        <p class="name">Норвежский суп</p>
+                        <p class="weight">330 г</p>
+                        <button>Добавить</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="main-dishes">
+            <div class="container">
+                <h2>Выберите второе блюдо</h2>
+                <div class="dishes-grid">
+                    <div class="dish-card">
+                        <img src="https://avatars.mds.yandex.net/i?id=16204d75bf1d70a4bb6131760cb48e99_l-8283357-images-thumbs&n=13" alt="Куриная грудка с овощами" width="300" height="200">
+                        <p class="price">380P</p>
+                        <p class="name">Куриная грудка с овощами</p>
+                        <p class="weight">350 г</p>
+                        <button>Добавить</button>
+                    </div>
+                    <div class="dish-card">
+                        <img src="https://s.yimg.com/ny/api/res/1.2/ciEVqnS6CJKknFPYc7AReg--/YXBwaWQ9aGlnaGxhbmRlcjt3PTEyNDI7aD02OTc7Y2Y9d2VicA--/https://media.zenfs.com/en/tasting_table_543/982c64473b392fbff524b329bfe688f9" alt="Паста Карбонара" width="300" height="200">
+                        <p class="price">350P</p>
+                        <p class="name">Паста Карбонара</p>
+                        <p class="weight">320 г</p>
+                        <button>Добавить</button>
+                    </div>
+                    <div class="dish-card">
+                        <img src="https://cdn.food.ru/unsigned/fit/640/480/ce/0/czM6Ly9tZWRpYS9waWN0dXJlcy9yZWNpcGVzLzExODk4MS9jb3ZlcnMvNEMycWhLLmpwZWc.webp" alt="Лосось с картофельным пюре" width="300" height="200">
+                        <p class="price">450P</p>
+                        <p class="name">Лосось с картофельным пюре</p>
+                        <p class="weight">380 г</p>
+                        <button>Добавить</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="drinks">
+            <div class="container">
+                <h2>Выберите напиток</h2>
+                <div class="dishes-grid">
+                    <div class="dish-card">
+                        <img src="https://avatars.mds.yandex.net/i?id=cd0aa7da8bf4061366c2fb20e20f550b_l-12413135-images-thumbs&n=13" alt="Сок апельсиновый" width="300" height="200">
+                        <p class="price">120P</p>
+                        <p class="name">Сок апельсиновый</p>
+                        <p class="weight">330 мл</p>
+                        <button>Добавить</button>
+                    </div>
+                    <div class="dish-card">
+                        <img src="https://avatars.mds.yandex.net/i?id=c1e2e400a21123f657fd0f7c66b91550_l-4012465-images-thumbs&n=13" alt="Морс клюквенный"  width="300" height="200">
+                        <p class="price">110P</p>
+                        <p class="name">Морс клюквенный</p>
+                        <p class="weight">330 мл</p>
+                        <button>Добавить</button>
+                    </div>
+                    <div class="dish-card">
+                        <img src="https://avatars.mds.yandex.net/i?id=19d6a746c215728eac6f29c83b500338_l-5220043-images-thumbs&n=13" alt="Чай черный" width="300" height="200">
+                        <p class="price">90P</p>
+                        <p class="name">Чай черный</p>
+                        <p class="weight">250 мл</p>
+                        <button>Добавить</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Форма заказа -->
+    <section id="order-form">
+        <div class="order-container">
+            <h2 class="order-title">Сделать заказ</h2>
+            <form action="https://httpbin.org/post" method="POST">
+                <div class="form-sections">
+                    <!-- Блок с заказом клиента -->
+                    <div class="form-section">
+                        <h3 class="section-title">Ваш заказ</h3>
+                        
+                        <div class="form-group">
+                            <label for="soup">Суп</label>
+                            <select id="soup" name="soup" required>
+                                <option value="" selected disabled>– Выберите суп –</option>
+                                <option value="gaspacho">Гаспачо</option>
+                                <option value="mushroom_cream">Грибной суп-пюре</option>
+                                <option value="norwegian">Норвежский суп</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="main_dish">Главное блюдо</label>
+                            <select id="main_dish" name="main_dish" required>
+                                <option value="" selected disabled>– Выберите главное блюдо –</option>
+                                <option value="chicken_breast">Куриная грудка с овощами</option>
+                                <option value="carbonara">Паста Карбонара</option>
+                                <option value="salmon">Лосось с картофельным пюре</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="drink">Напиток</label>
+                            <select id="drink" name="drink" required>
+                                <option value="" selected disabled>– Выберите напиток –</option>
+                                <option value="orange_juice">Сок апельсиновый</option>
+                                <option value="cranberry_morse">Морс клюквенный</option>
+                                <option value="black_tea">Чай черный</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="comments">Комментарии к заказу</label>
+                            <textarea id="comments" name="comments" placeholder="Ваши пожелания к заказу"></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- Блок с данными клиента -->
+                    <div class="form-section">
+                        <h3 class="section-title">Ваши данные</h3>
+                        
+                        <div class="form-group">
+                            <label for="name">Имя</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="newsletter" name="newsletter" checked>
+                            <label for="newsletter">Получать информацию о скидках и акциях</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone">Номер телефона</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="address">Адрес доставки</label>
+                            <input type="text" id="address" name="address" required>
+                            <p class="info-text">Доставка осуществляется только по Москве</p>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Время доставки:</label>
+                            <div class="delivery-time-options">
+                                <div class="radio-group">
+                                    <input type="radio" id="asap" name="delivery_time" value="asap" required>
+                                    <label for="asap">Как можно скорее</label>
+                                </div>
+                                <div class="radio-group">
+                                    <input type="radio" id="specific_time" name="delivery_time" value="specific_time" required>
+                                    <label for="specific_time">К указанному времени</label>
+                                </div>
+                            </div>
+                            
+                            <div class="time-input">
+                                <label for="delivery_time_input">Укажите время доставки</label>
+                                <input type="time" id="delivery_time_input" name="delivery_time_input" min="07:00" max="23:00" step="300">
+                                <p class="info-text">Доступное время доставки с 7:00 до 23:00</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="reset" class="btn btn-reset">Сбросить</button>
+                    <button type="submit" class="btn btn-submit">Отправить</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <footer id="contacts">
+        <div class="container">
+            <div class="footer-content">
+                <div class="contact-info">
+                    <h3>Контакты</h3>
+                    <p>Адрес: Москва, ул. Прянишникова 2А</p>
+                    <p>Телефон: <a href="tel:+74951234567">+7 (495) 123-45-67</a></p>
+                    <p>Время работы: Пн-Пт 9:00-18:00</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
